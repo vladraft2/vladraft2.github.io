@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aminology — Under Construction</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Syne:wght@600;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #050f1f;
+      --surface:  #0b1e38;
+      --blue:     #1a6bcc;
+      --sky:      #4da8e0;
+      --frost:    #c8e8f8;
+      --white:    #eef5fb;
+      --muted:    rgba(200,232,248,0.38);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Background glow blobs */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .blob-1 {
+      width: 520px; height: 520px;
+      background: radial-gradient(circle, rgba(26,107,204,0.28) 0%, transparent 70%);
+      top: -120px; left: -100px;
+    }
+    .blob-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(77,168,224,0.18) 0%, transparent 70%);
+      bottom: -80px; right: -60px;
+    }
+
+    /* Subtle grid */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(77,168,224,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(77,168,224,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Decorative frame */
+    .frame {
+      position: fixed;
+      inset: 28px;
+      border: 1px solid rgba(77,168,224,0.12);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Main card */
+    .container {
+      position: relative;
+      z-index: 5;
+      text-align: center;
+      padding: 3.5rem 3rem;
+      max-width: 620px;
+      width: 90%;
+      background: rgba(11,30,56,0.6);
+      border: 1px solid rgba(77,168,224,0.18);
+      border-radius: 4px;
+      backdrop-filter: blur(12px);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 1s cubic-bezier(.22,.61,.36,1) 0.2s forwards;
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Logo / company name */
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.2rem, 7vw, 3.8rem);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, var(--white) 30%, var(--sky) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.5s forwards;
+    }
+
+    .tagline-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 1.2rem auto 0;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.7s forwards;
+    }
+    .tagline-bar span {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--sky);
+      font-weight: 500;
+    }
+    .tagline-bar::before, .tagline-bar::after {
+      content: '';
+      flex: 1;
+      max-width: 60px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(77,168,224,0.5));
+    }
+    .tagline-bar::after {
+      background: linear-gradient(to left, transparent, rgba(77,168,224,0.5));
+    }
+
+    /* Divider */
+    .divider {
+      width: 48px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--blue), var(--sky));
+      margin: 2.4rem auto;
+      border-radius: 2px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.85s forwards;
+    }
+
+    /* Under Construction heading */
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: clamp(1.1rem, 3.5vw, 1.6rem);
+      letter-spacing: 0.06em;
+      color: var(--frost);
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.95s forwards;
+    }
+
+    /* Body text */
+    .body-text {
+      font-size: 0.95rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--muted);
+      margin-top: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 1.1s forwards;
+    }
+
+    /* Contact */
+    .contact {
+      display: inline-block;
+      margin-top: 2.4rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      color: var(--sky);
+      text-decoration: none;
+      border: 1px solid rgba(77,168,224,0.3);
+      padding: 0.6rem 1.4rem;
+      border-radius: 2px;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 1.25s forwards;
+    }
+    .contact:hover {
+      background: rgba(77,168,224,0.1);
+      border-color: var(--sky);
+      color: var(--white);
+    }
+
+    /* Status indicator */
+    .status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 2.4rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 1.4s forwards;
+    }
+    .status-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--sky);
+      animation: pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(77,168,224,0.4); }
+      50% { opacity: 0.5; transform: scale(0.7); box-shadow: 0 0 0 5px rgba(77,168,224,0); }
+    }
+    .status-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(77,168,224,0.5);
+    }
+
+    /* Footer */
+    .footer {
+      position: fixed;
+      bottom: 38px;
+      left: 0; right: 0;
+      text-align: center;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      color: rgba(200,232,248,0.15);
+      z-index: 5;
+      opacity: 0;
+      animation: fadeUp 1s ease 1.6s forwards;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="frame"></div>
+
+  <div class="container">
+    <div class="logo">Aminology</div>
+    <div class="tagline-bar"><span>Medicinal Distribution</span></div>
+
+    <div class="divider"></div>
+
+    <h1>Under Construction</h1>
+    <p class="body-text">We're working on something great.<br>Great things take time.</p>
+
+    <a class="contact" href="mailto:admin@aminology.org">admin@aminology.org</a>
+
+    <div class="status">
+      <div class="status-dot"></div>
+      <span class="status-label">Work in progress</span>
+    </div>
+  </div>
+
+  <div class="footer">© 2026 Aminology. All rights reserved.</div>
+
+</body>
+</html>
